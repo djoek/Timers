@@ -56,7 +56,7 @@
 
 <style>
     div.timer {
-        width: 16rem;
+        width: 15rem; height: 12rem;
         background-color: var(--theme-color);
         padding: 1rem;
         border-radius: 1rem;
