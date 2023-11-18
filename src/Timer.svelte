@@ -77,7 +77,6 @@
         width: 15rem;
         height: 12rem;
         background: var(--theme-color);
-        background: linear-gradient(-45deg, var(--theme-color) 0%, rgba(0,0,0,0.5) 100%);
         padding-left: 1rem;
         padding-right: 1rem;
         border-radius: 1rem;
