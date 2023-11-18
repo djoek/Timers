@@ -48,11 +48,11 @@
     <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
     <form on:submit|preventDefault={(ev) => startTimer(ev)} class="timerForm">
         <label>
-            <input type="text" bind:value={timerMinutes} on:focus={event => event.target.select()} class="minutesField">
+            <input type="text" inputmode="numeric" bind:value={timerMinutes} on:focus={event => event.target.select()} class="minutesField">
             <span>M</span>
         </label>
         <label>
-            <input type="text" bind:value={timerSeconds} on:focus={event => event.target.select()} class="secondsField">
+            <input type="text" inputmode="numeric" bind:value={timerSeconds} on:focus={event => event.target.select()} class="secondsField">
             <span>S</span>
         </label>
         <button type="button" on:click={pauseTimer}>{ paused ? "▶" : "⏸" }</button>
@@ -76,7 +76,8 @@
     div.timer {
         width: 15rem;
         height: 12rem;
-        background-color: var(--theme-color);
+        background: var(--theme-color);
+        background: linear-gradient(-45deg, var(--theme-color) 0%, rgba(0,0,0,0.5) 100%);
         padding-left: 1rem;
         padding-right: 1rem;
         border-radius: 1rem;
@@ -129,6 +130,7 @@
         padding-bottom: 0;
         padding-right: 2rem;
         appearance: none;
+
     }
 
     label > input + span {
