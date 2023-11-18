@@ -45,8 +45,8 @@
             <span>M</span>
         </label>
         <label>
-        <input type="text" bind:value={timerSeconds} on:focus={event => event.target.select()} class="secondsField">
-                    <span>S</span>
+            <input type="text" bind:value={timerSeconds} on:focus={event => event.target.select()} class="secondsField">
+            <span>S</span>
         </label>
         <button type="button" on:click={pauseTimer}>{ paused ? "▶" : "⏸" }</button>
         <button type="submit">RESET</button>
@@ -56,7 +56,8 @@
 
 <style>
     div.timer {
-        width: 15rem; height: 12rem;
+        width: 15rem;
+        height: 12rem;
         background-color: var(--theme-color);
         padding: 1rem;
         border-radius: 1rem;
@@ -64,7 +65,7 @@
 
     form {
         display: grid;
-        grid-gap: 1rem;
+        grid-gap: 0.5rem;
         grid-template-columns: 1fr 1fr;
     }
 
@@ -78,6 +79,8 @@
 
     button {
         margin: 0;
+        background-color: rgba(0, 0, 0, 0.66);
+        border: none;
     }
 
     button:active {
@@ -99,12 +102,13 @@
         border-radius: 0;
         background-color: rgba(0, 0, 0, 0.33);
         margin: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
         padding-right: 2rem;
         appearance: none;
     }
-    label>input + span {
+
+    label > input + span {
         margin-left: -1rem;
         user-select: none;
         font-size: small;
@@ -118,12 +122,9 @@
         text-align: center;
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
-        text-shadow: -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
-        1px 1px 0 #000;
-                line-height: var(--line-height);
+        line-height: var(--line-height);
         height: var(--line-height);
+        padding: 0.5rem;
     }
 
 
