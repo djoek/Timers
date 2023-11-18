@@ -49,7 +49,7 @@
             <span>S</span>
         </label>
         <button type="button" on:click={pauseTimer}>{ paused ? "▶" : "⏸" }</button>
-        <button type="submit">RESET</button>
+        <button type="submit">SET</button>
     </form>
 </div>
 
@@ -61,6 +61,10 @@
         background-color: var(--theme-color);
         padding: 1rem;
         border-radius: 1rem;
+
+        box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+        -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
     }
 
     form {
@@ -118,8 +122,8 @@
 
 
     div.nameField {
+        display: flex;
         color: white;
-        text-align: center;
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
         line-height: var(--line-height);

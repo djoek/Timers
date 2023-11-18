@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@picocss/pico": "^1.5.10",
+    "dragula": "^3.7.3",
     "sirv-cli": "^2.0.0"
   }
 }
