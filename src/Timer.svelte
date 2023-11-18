@@ -3,13 +3,16 @@
     export let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
     export let secondsToGo = 0
     export let name = ""
+    export let timerId = 0
 
     let interval
 
     $: timerMinutes = Math.floor(secondsToGo / 60)
     $: timerSeconds = secondsToGo - Math.floor(secondsToGo / 60) * 60
 
-    function startTimer() {
+    function startTimer(ev) {
+        ev.target.blur()
+        stopTimer()
         secondsToGo = timerMinutes * 60 + timerSeconds
         paused = false
         interval = setInterval(() => {
@@ -17,7 +20,7 @@
                 return
             }
             secondsToGo = secondsToGo - 1
-            if (secondsToGo < 0) {
+            if (secondsToGo <= 0) {
                 stopTimer()
                 secondsToGo = 0
                 paused = true
@@ -27,6 +30,9 @@
 
     function pauseTimer() {
         paused = !paused
+        if (secondsToGo <= 0) {
+            paused = true
+        }
     }
 
     function stopTimer() {
@@ -38,8 +44,9 @@
 
 
 <div class="timer" style="--theme-color: {color}">
+    <div class="handle">&nbsp;</div>
     <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
-    <form on:submit|preventDefault={startTimer} class="timerForm">
+    <form on:submit|preventDefault={(ev) => startTimer(ev)} class="timerForm">
         <label>
             <input type="text" bind:value={timerMinutes} on:focus={event => event.target.select()} class="minutesField">
             <span>M</span>
@@ -55,11 +62,23 @@
 
 
 <style>
+    div.handle {
+        border-radius: 0 0 0.25rem 0.25rem;
+        background: repeating-linear-gradient(
+                -45deg,
+                rgba(0, 0, 0, 0.10),
+                rgba(0, 0, 0, 0.10) 0.5rem,
+                rgba(0, 0, 0, 0) 0.5rem,
+                rgba(0, 0, 0, 0) 1rem
+        );
+    }
+
     div.timer {
         width: 15rem;
         height: 12rem;
         background-color: var(--theme-color);
-        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
         border-radius: 1rem;
 
         box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);

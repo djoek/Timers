@@ -6,29 +6,34 @@
     import 'dragula/dist/dragula.min.css';
 
     onMount(async () => {
-         const drake = dragula([document.querySelector('div.timer'), document.querySelector('main.container')], {});
+        const drake = dragula([document.querySelector('div.timer'), document.querySelector('main.container')],
+            {
+                moves: function (el, container, handle) {
+                    return handle.classList.contains('handle');
+                }
+            })
     });
 
 </script>
 
 <main class="container">
-    <Timer name="Bob" color="Orange" />
-    <Timer name="Alice" color="Gold" />
-    <Timer name="Trudy" color="Pink" />
-    <Timer name="Jose" color="Purple" />
-    <Timer name="John" color="Indigo" />
-    <Timer name="Paul" color="DarkViolet" />
-    <Timer name="George" color="SeaGreen" />
-    <Timer name="Ringo" color="DimGray" />
+    <Timer timerId=1 name="Bob" color="Orange"/>
+    <Timer timerId=2 name="Alice" color="Gold"/>
+    <Timer timerId=3 name="Trudy" color="Pink"/>
+    <Timer timerId=4 name="Jose" color="Purple"/>
+    <Timer timerId=5 name="John" color="Indigo"/>
+    <Timer timerId=6 name="Paul" color="DarkViolet"/>
+    <Timer timerId=7 name="George" color="SeaGreen"/>
+    <Timer timerId=8 name="Ringo" color="DimGray"/>
 
-    <Timer name="Larry" color="SteelBlue" />
-    <Timer name="Moe" color="Maroon" />
-    <Timer name="Curly" color="Brown" />
-    <Timer name="Homer" color="Olive" class="timer"/>
-    <Timer name="Marge" color="Navy" class="timer"/>
-    <Timer name="Bart" color="Teal" class="timer"/>
-    <Timer name="Lisa" color="DarkGray" class="timer"/>
-    <Timer name="Alanis" color="Red" class="timer"/>
+    <Timer timerId=9 name="Larry" color="SteelBlue"/>
+    <Timer timerId=10 name="Moe" color="Maroon"/>
+    <Timer timerId=11 name="Curly" color="Brown"/>
+    <Timer timerId=12 name="Homer" color="Olive"/>
+    <Timer timerId=13 name="Marge" color="Navy"/>
+    <Timer timerId=14 name="Bart" color="Teal"/>
+    <Timer timerId=15 name="Lisa" color="DarkGray"/>
+    <Timer timerId=16 name="Alanis" color="Red"/>
 </main>
 
 <style>
