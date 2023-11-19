@@ -69,16 +69,18 @@
         <button type="submit">SET</button>
     </form>
     <dialog bind:this={settings}>
-        <header>Settings</header>
-        <section>
-            <input type="color" bind:value={color1}>
-            <input type="color" bind:value={color2}>
-        </section>
-        <footer>
-            <form method="dialog">
-                <button>Close</button>
-            </form>
-        </footer>
+        <div style="display: flex; flex-flow: column; width:16rem;">
+            <header><h1>Settings</h1></header>
+            <section>
+                <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
+                <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
+            </section>
+            <footer>
+                <form method="dialog">
+                    <button>Close</button>
+                </form>
+            </footer>
+        </div>
     </dialog>
 </div>
 
@@ -86,14 +88,25 @@
 <style>
     dialog {
         grid-gap: 0.5rem;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 2fr 1fr;
         flex-flow: column;
-        background-color: rgba(0,0,0,0.66);
-
+        background-color: rgba(0, 0, 0, 0.66);
+        border: thin solid black;
     }
 
-    dialog > input {
-        width: 4rem;
+    dialog > div > section > label {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        font-size: x-large;
+        justify-content: center;
+        text-align: left;
+    }
+
+    input[type="color"] {
+        margin: 0;
+        padding: 0;
+        font-size: medium;
+        height: 2rem;
     }
 
     div.handle {
@@ -110,7 +123,7 @@
 
     div.timer {
 
-        background: linear-gradient(-45deg, var(--color1), var(--color2));
+        background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
 
         box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
@@ -124,7 +137,7 @@
         grid-template-columns: 2fr 12fr;
     }
 
-    form {
+    form.timerForm {
         grid-area: timer;
         display: grid;
         grid-gap: 0.5rem;
@@ -157,7 +170,6 @@
 
     button[type=button] {
     }
-
 
 
     input[type="text"] {
@@ -197,6 +209,7 @@
         margin-top: 0.75rem;
         padding: 0.25rem;
     }
+
     div.settings {
         grid-area: settings;
         display: flex;
