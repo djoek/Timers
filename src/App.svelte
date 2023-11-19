@@ -5,6 +5,11 @@
     import dragula from 'dragula';
     import 'dragula/dist/dragula.min.css';
 
+    const colors = ["#0e6251", "#0b5345", "#186a3b", "#145a32", "#1b4f72",
+                    "#154360", "#512e5f", "#4a235a", "#1b2631", "#17202a",
+                    "#7d6608", "#7e5109", "#784212", "#6e2c00", "#78281f",
+                    "#641e16", "#7b7d7d", "#626567", "#4d5656", "#424949"]
+
     onMount(async () => {
         const drake = dragula([document.querySelector('div.timer'), document.querySelector('main.container')],
             {
@@ -17,33 +22,21 @@
 </script>
 
 <main class="container">
-    <Timer timerId=1 name="Bob" color="Orange"/>
-    <Timer timerId=2 name="Alice" color="Gold"/>
-    <Timer timerId=3 name="Trudy" color="Pink"/>
-    <Timer timerId=4 name="Jose" color="Purple"/>
-    <Timer timerId=5 name="John" color="Indigo"/>
-    <Timer timerId=6 name="Paul" color="DarkViolet"/>
-    <Timer timerId=7 name="George" color="SeaGreen"/>
-    <Timer timerId=8 name="Ringo" color="DimGray"/>
-
-    <Timer timerId=9 name="Larry" color="SteelBlue"/>
-    <Timer timerId=10 name="Moe" color="Maroon"/>
-    <Timer timerId=11 name="Curly" color="Brown"/>
-    <Timer timerId=12 name="Homer" color="Olive"/>
-    <Timer timerId=13 name="Marge" color="Navy"/>
-    <Timer timerId=14 name="Bart" color="Teal"/>
-    <Timer timerId=15 name="Lisa" color="DarkGray"/>
-    <Timer timerId=16 name="Alanis" color="Red"/>
+	{#each Array(15) as _, index (index)}
+        <Timer timerId={index+1} name="Timer {index+1}"
+               color1={colors[Math.floor(Math.random()*colors.length)]}
+               color2={colors[Math.floor(Math.random()*colors.length)]}/>
+    {/each}
 </main>
 
 <style>
 
     main {
-        gap: 1rem;
-        display: flex;
-        flex-flow: row wrap;
-        flex-grow: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 16rem);
+        grid-gap: 1rem;
         justify-content: center;
+
     }
 
     @media (min-width: 640px) {
@@ -51,4 +44,5 @@
             max-width: none;
         }
     }
+
 </style>
