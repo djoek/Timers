@@ -92,7 +92,7 @@
         display: grid;
         grid-gap: 1rem;
         padding: 1rem;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
     }
 
     main > div.controls > button {

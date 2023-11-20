@@ -17,7 +17,7 @@
     let percentageDone = '0%'
 
     $: secondsToGo = parseInt(timerMinutes) * 60 + parseInt(timerSeconds)
-    $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:0});
+    $: percentageDone = paused ? '0%' : Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:0});
 
     function spread(stg) {
         timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
@@ -26,6 +26,8 @@
     }
 
     function setTimer(ev) {
+        minutes = timerMinutes
+        seconds = timerSeconds
         if (paused) {
             ev.target.focus()
             resetTimer()
@@ -71,13 +73,13 @@
         <label>
             <input type="number" inputmode="numeric" bind:value={timerMinutes}
                    on:focus|preventDefault={event => event.target.select()}
-                   class="minutesField" disabled={!paused}>
+                   class="minutesField" disabled={!paused} min="0">
             <span>M</span>
         </label>
         <label>
             <input type="number" inputmode="numeric" bind:value={timerSeconds}
                    on:focus|preventDefault={event => event.target.select()}
-                   class="secondsField" disabled={!paused}>
+                   class="secondsField" disabled={!paused} min="0">
             <span>S</span>
         </label>
 
@@ -260,5 +262,6 @@
         margin-left: -1em;
         user-select: none;
         font-size: medium;
+        z-index: -1
     }
 </style>
