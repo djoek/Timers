@@ -14,9 +14,10 @@
 
     let timerMinutes = minutes
     let timerSeconds = seconds
+    let percentageDone = '0%'
 
     $: secondsToGo = parseInt(timerMinutes) * 60 + parseInt(timerSeconds)
-
+    $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:0});
 
     function spread(stg) {
         timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
@@ -30,11 +31,11 @@
             resetTimer()
             spread(secondsToGo)
 
-            setTimeout(() => {  // Syncronized
+            setTimeout(() => {  // Synchronized
                 interval = setInterval(() => {
                     spread(secondsToGo - 1)
                     if (secondsToGo <= 0) {
-                        paused = true
+                        resetTimer()
                     }
                 }, 1000)
             }, 1000 - new Date().getMilliseconds());
@@ -50,7 +51,6 @@
     }
 
     let settings;
-
     function toggleSettings() {
         settings.show();
     }
@@ -61,7 +61,7 @@
 </script>
 
 
-<div class="timer" style="--color1: {color1}; --color2: {color2};">
+<div class="timer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
     <div class="handle">&nbsp;</div>
     <div on:click={toggleSettings} class="settings">⚙</div>
     <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
@@ -178,34 +178,30 @@
     button {
         margin: 0;
         background-color: rgba(0, 0, 0, 0.25);
-        border: 0.25rem solid rgba(0, 0, 0, 0.5);
+        border: 0.25rem solid rgba(0, 0, 0, 1);
         border-radius: 0.5rem;
 
     }
 
     button:active {
         font-weight: bolder;
-
     }
 
     button[type=submit] {
     }
 
-    button[type=button] {
-    }
-
-
     div.nameField {
         grid-area: name;
         display: flex;
         color: white;
-        background-color: rgba(0, 0, 0, 0.11);
         font-weight: bold;
         line-height: var(--line-height);
         height: var(--line-height);
         margin-right: 0.75rem;
         margin-top: 0.75rem;
         padding: 0.25rem;
+        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0 var(--percentageDone), rgba(0,0,0,0.11) var(--percentageDone) 100%);
+
     }
 
     div.settings {
