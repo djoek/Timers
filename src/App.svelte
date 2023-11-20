@@ -19,6 +19,10 @@
         timers = [...timers, timerProps]
     }
 
+    function pauseAll() {
+        timers.forEach(item => item['paused'] = true);
+        timers = [...timers]
+    }
     onMount(async () => {
         const drake = dragula([document.querySelector('div.timer'), document.querySelector('.timersContainer')],
             {
@@ -69,6 +73,7 @@
         color2: colors[Math.floor(Math.random() * colors.length)],
         })}>05:00
         </button>
+        <button on:click={pauseAll}>⏸ All</button>
     </div>
 </main>
 
