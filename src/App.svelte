@@ -20,7 +20,7 @@
     }
 
     onMount(async () => {
-        const drake = dragula([document.querySelector('div.timer'), document.querySelector('main.container')],
+        const drake = dragula([document.querySelector('div.timer'), document.querySelector('.timersContainer')],
             {
                 moves: function (el, container, handle) {
                     return handle.classList.contains('handle');

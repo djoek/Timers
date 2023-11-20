@@ -2,6 +2,7 @@
     import {onMount} from 'svelte';
 
     export let paused = true
+    export let autoReset = false
     export let color1 = '#ff0000';
     export let color2 = '#0000ff';
     export let minutes = 0
@@ -32,30 +33,41 @@
         if (paused) {
             ev.target.focus()
             spread(secondsToGo)
-
-
         }
         paused = !paused
     }
 
-    function resetTimer() {
+    function setTimer() {
+        // Changes the default time
         paused = true
-        clearInterval(interval);
         minutes = timerMinutes
         seconds = timerSeconds
+        spread(seconds + minutes * 60)
 
+        console.log('set the timer to', minutes, 'minutes and', seconds, 'seconds')
+    }
+
+    function initTimer() {
+        // creates the interval
+        clearInterval(interval);
         setTimeout(() => {  // Synchronized
             interval = setInterval(() => {
                 if (!paused) {
                     spread(secondsToGo - 1)
                 }
                 if (secondsToGo <= 0) {
-                    clearInterval(interval);
+                    paused = true
                     timerMinutes = 0
                     timerSeconds = 0
                 }
             }, 1000)
         }, 1000 - new Date().getMilliseconds());
+    }
+
+    function resetTimer() {
+        // Sets the timer display back to the default values and clears the interval
+        console.log('reset timer')
+        spread(seconds + minutes * 60)
     }
 
     let settings;
@@ -66,32 +78,36 @@
 
     onMount(() => {
         spread(secondsToGo)
+        initTimer()
         resetTimer()
     });
 </script>
 
 
 <div class="timer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
-    <div class="handle">&nbsp;</div>
-    <div on:click={toggleSettings} class="settings">⚙</div>
-    <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
+    <header class="handle">&nbsp;</header>
+    <div class="settingsContainer">
+        <button on:click={toggleSettings} class="cogField">⚙</button>
+        <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
+    </div>
     <form class="timerForm"
           on:submit|preventDefault={(ev) => toggleTimer(ev)}
           on:reset|preventDefault={resetTimer}>
         <label>
             <input type="number" inputmode="numeric" bind:value={timerMinutes}
                    on:focus|preventDefault={event => event.target.select()}
+                   on:change={setTimer}
                    class="minutesField" disabled={!paused} min="0">
             <span>M</span>
         </label>
         <label>
             <input type="number" inputmode="numeric" bind:value={timerSeconds}
                    on:focus|preventDefault={event => event.target.select()}
+                   on:change={setTimer}
                    class="secondsField" disabled={!paused} min="0">
             <span>S</span>
         </label>
-
-        <button type="reset">SET</button>
+        <button type="reset" class="resetField">↺</button>
         <button type="submit">{ paused ? "▶" : "⏸" }</button>
     </form>
     <dialog bind:this={settings}>
@@ -100,6 +116,7 @@
             <section>
                 <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
                 <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
+                <label><span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}></label>
                 <label><span>Timer Default: </span><input type="number" bind:value={minutes}><input type="number"
                                                                                                     bind:value={seconds}></label>
             </section>
@@ -150,7 +167,7 @@
         text-align: center;
     }
 
-    div.handle {
+    header.handle {
         grid-area: handle;
         border-radius: 0 0 0.25rem 0.25rem;
         background: repeating-linear-gradient(
@@ -173,7 +190,7 @@
 
         display: grid;
         grid-template-areas: "handle handle"
-                             "settings name"
+                             "settings settings"
                              "timer timer";
         grid-template-columns: 2fr 12fr;
     }
@@ -182,7 +199,7 @@
         grid-area: timer;
         display: grid;
         grid-gap: 0.5rem;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         margin: 0.75rem;
     }
 
@@ -211,36 +228,46 @@
     button[type=submit] {
     }
 
-    div.nameField {
-        grid-area: name;
-        display: flex;
-        color: white;
-        font-weight: bold;
-        line-height: var(--line-height);
-        height: var(--line-height);
-        margin-right: 0.75rem;
-        margin-top: 0.75rem;
-        padding: 0.25rem;
-        background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 var(--percentageDone), rgba(0, 0, 0, 0.11) var(--percentageDone) 100%);
-
-    }
-
-    div.settings {
+    div.settingsContainer {
         grid-area: settings;
-        display: flex;
+        display: grid;
+        grid-gap: 0.25rem;
+        grid-template-columns: 1fr 8fr;
         color: white;
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
         line-height: var(--line-height);
         height: var(--line-height);
-        justify-content: center;
-        align-items: center;
-        margin-left: 0.75rem;
-        margin-top: 0.75rem;
+        margin: 0.75rem 0.75rem 0.25rem;
     }
 
+    div.settingsContainer > * {
+        padding: 0.25rem;
+    }
 
-    form input[type="number"] {
+    div.settingsContainer > button {
+        border: none; background: none;
+    }
+
+    form > button[type="reset"] {
+        grid-column: span 1;
+    }
+    form > button[type="submit"] {
+        grid-column: span 3;
+    }
+
+    div.nameField {
+        display: flex;
+        color: white;
+        font-weight: bold;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 var(--percentageDone), rgba(0, 0, 0, 0.11) var(--percentageDone) 100%);
+
+    }
+    form > label {
+        grid-column: span 2;
+    }
+
+    form > label > input[type="number"] {
         display: inline;
         border: none;
         outline: none;
@@ -253,8 +280,9 @@
         font-size: xxx-large;
         text-align: center;
         font-weight: bold;
-
     }
+
+
 
 
     form input[type="number"]:disabled {
@@ -262,7 +290,6 @@
         background-color: rgba(0, 0, 0, 1);
         appearance: none;
         opacity: 1;
-
     }
 
     label > input + span {
@@ -270,6 +297,6 @@
         margin-left: -1em;
         user-select: none;
         font-size: medium;
-        z-index: -1
+        pointer-events: none;
     }
 </style>
