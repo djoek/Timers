@@ -17,7 +17,10 @@
     let percentageDone = '0%'
 
     $: secondsToGo = parseInt(timerMinutes) * 60 + parseInt(timerSeconds)
-    $: percentageDone = paused ? '0%' : Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:0});
+    $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined, {
+        style: 'percent',
+        minimumFractionDigits: 0
+    });
 
     function spread(stg) {
         timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
@@ -25,40 +28,45 @@
         return stg
     }
 
-    function setTimer(ev) {
-        minutes = timerMinutes
-        seconds = timerSeconds
+    function toggleTimer(ev) {
         if (paused) {
             ev.target.focus()
-            resetTimer()
             spread(secondsToGo)
 
-            setTimeout(() => {  // Synchronized
-                interval = setInterval(() => {
-                    spread(secondsToGo - 1)
-                    if (secondsToGo <= 0) {
-                        resetTimer()
-                    }
-                }, 1000)
-            }, 1000 - new Date().getMilliseconds());
+
         }
         paused = !paused
     }
 
     function resetTimer() {
-        clearInterval(interval);
         paused = true
-        timerMinutes = minutes
-        timerSeconds = seconds
+        clearInterval(interval);
+        minutes = timerMinutes
+        seconds = timerSeconds
+
+        setTimeout(() => {  // Synchronized
+            interval = setInterval(() => {
+                if (!paused) {
+                    spread(secondsToGo - 1)
+                }
+                if (secondsToGo <= 0) {
+                    clearInterval(interval);
+                    timerMinutes = 0
+                    timerSeconds = 0
+                }
+            }, 1000)
+        }, 1000 - new Date().getMilliseconds());
     }
 
     let settings;
+
     function toggleSettings() {
         settings.show();
     }
 
     onMount(() => {
         spread(secondsToGo)
+        resetTimer()
     });
 </script>
 
@@ -68,7 +76,7 @@
     <div on:click={toggleSettings} class="settings">⚙</div>
     <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
     <form class="timerForm"
-          on:submit|preventDefault={(ev) => setTimer(ev)}
+          on:submit|preventDefault={(ev) => toggleTimer(ev)}
           on:reset|preventDefault={resetTimer}>
         <label>
             <input type="number" inputmode="numeric" bind:value={timerMinutes}
@@ -83,7 +91,7 @@
             <span>S</span>
         </label>
 
-        <button type="reset">RESET</button>
+        <button type="reset">SET</button>
         <button type="submit">{ paused ? "▶" : "⏸" }</button>
     </form>
     <dialog bind:this={settings}>
@@ -92,6 +100,8 @@
             <section>
                 <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
                 <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
+                <label><span>Timer Default: </span><input type="number" bind:value={minutes}><input type="number"
+                                                                                                    bind:value={seconds}></label>
             </section>
             <footer>
                 <form method="dialog">
@@ -119,17 +129,25 @@
 
     dialog > div > section > label {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        font-size: x-large;
+        grid-template-columns: 4fr 1fr 1fr;
         justify-content: center;
         text-align: left;
+        height: 2rem;
     }
 
-    input[type="color"] {
+    dialog > div > section > label > input {
         margin: 0;
         padding: 0;
         font-size: medium;
         height: 2rem;
+        display: inline;
+        border: none;
+        outline: none;
+        border-radius: 0;
+        background-color: rgba(0, 0, 0, 0.33);
+        appearance: none;
+        vertical-align: bottom;
+        text-align: center;
     }
 
     div.handle {
@@ -170,12 +188,13 @@
 
     label {
         text-align: right;
-        display: flex;
-        flex-flow: row;
+        display: grid;
+        grid-template-columns: 5fr 0fr;
         font-family: monospace, sans-serif;
         margin: 0;
         padding: 0;
     }
+
 
     button {
         margin: 0;
@@ -202,7 +221,7 @@
         margin-right: 0.75rem;
         margin-top: 0.75rem;
         padding: 0.25rem;
-        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0 var(--percentageDone), rgba(0,0,0,0.11) var(--percentageDone) 100%);
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 var(--percentageDone), rgba(0, 0, 0, 0.11) var(--percentageDone) 100%);
 
     }
 
@@ -220,16 +239,8 @@
         margin-top: 0.75rem;
     }
 
-    label {
-        text-align: right;
-        display: grid;
-        grid-template-columns: 5fr 0fr;
-        font-family: monospace, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
 
-    input[type="number"] {
+    form input[type="number"] {
         display: inline;
         border: none;
         outline: none;
@@ -239,9 +250,6 @@
         padding: 0;
         appearance: none;
         vertical-align: bottom;
-    }
-
-    input[type="number"] {
         font-size: xxx-large;
         text-align: center;
         font-weight: bold;
@@ -249,7 +257,7 @@
     }
 
 
-    input[type="number"]:disabled {
+    form input[type="number"]:disabled {
         color: white;
         background-color: rgba(0, 0, 0, 1);
         appearance: none;
