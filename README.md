@@ -1,20 +1,7 @@
-# Svelte
+# Spacetimers
 
-This directory is a brief example of a [Svelte](https://svelte.dev/) site that can be deployed to Vercel with zero-configuration. If you need to use API Routes, we recommend using our [SvelteKit example](https://github.com/vercel/vercel/tree/main/examples/sveltekit).
+Once upon a time, I needed to run a bunch of timers for a D&D game I DM in which 'real-time' events were going to happen to the players.  I ended up fiddling with phones and it sort of caused me a lot of stress. 
 
-## Deploy Your Own
+Since I couldn't quickly find the kind of web app that I needed, I spent a few hours over the weekend building what I need. It's free to use, runs 100% in browser, has a lot of customization options. 
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/svelte&template=svelte)
-
-_Live Example: https://svelte.vercel.app_
-
-## Getting Started
-
-```bash
-npx degit sveltejs/template my-svelte-project
-cd my-svelte-project
-npm install
-npm run dev
-```
-
-Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+I will not be taking any feature requests or bug fixes.  
