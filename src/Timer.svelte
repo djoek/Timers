@@ -1,5 +1,5 @@
 <script>
-    import {onMount} from 'svelte';
+    import {onMount, onDestroy} from 'svelte';
 
     export let onClose;
 
@@ -61,6 +61,9 @@
                     paused = true
                     timerMinutes = 0
                     timerSeconds = 0
+                    if (notMuted) {
+                        timerAlarm.play();
+                    }
                     if (autoReset) {
                         resetTimer();
                     }
@@ -81,10 +84,17 @@
         settings.show();
     }
 
+    let timerAlarm;
+    let notMuted = true;
+
     onMount(() => {
         spread(secondsToGo)
         initTimer()
         resetTimer()
+    });
+
+    onDestroy(() => {
+        clearInterval(interval);
     });
 </script>
 
@@ -118,12 +128,15 @@
         <button type="submit">{ paused ? "▶" : "⏸" }</button>
     </form>
     <dialog bind:this={settings}>
+        <audio bind:this={timerAlarm} src="/assets/bbbb4x.wav"></audio>
+
         <div style="display: flex; flex-flow: column; width:16rem;">
             <header><h2>{name} Settings</h2></header>
             <section>
                 <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
                 <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
                 <label><span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}></label>
+                <label><span>Play Sound: </span><input type="checkbox" bind:checked={notMuted}></label>
             </section>
             <footer>
                 <form method="dialog">
