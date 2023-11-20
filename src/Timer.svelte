@@ -102,6 +102,7 @@
             <input type="number" inputmode="numeric" bind:value={timerMinutes}
                    on:focus|preventDefault={event => event.target.select()}
                    on:change={setTimer}
+                   placeholder={minutes}
                    class="minutesField" disabled={!paused} min="0">
             <span>M</span>
         </label>
@@ -109,6 +110,7 @@
             <input type="number" inputmode="numeric" bind:value={timerSeconds}
                    on:focus|preventDefault={event => event.target.select()}
                    on:change={setTimer}
+                   placeholder={seconds}
                    class="secondsField" disabled={!paused} min="0">
             <span>S</span>
         </label>
@@ -314,9 +316,12 @@
 
     form input[type="number"]:disabled {
         color: white;
-        background-color: rgba(0, 0, 0, 1);
+        background-color: rgba(0, 0, 0, 0);
         appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
         opacity: 1;
+
     }
 
     label > input + span {
