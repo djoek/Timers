@@ -1,6 +1,8 @@
 <script>
     import {onMount} from 'svelte';
 
+    export let onClose;
+
     export let paused = true
     export let autoReset = false
     export let color1 = '#ff0000';
@@ -59,6 +61,9 @@
                     paused = true
                     timerMinutes = 0
                     timerSeconds = 0
+                    if (autoReset) {
+                        resetTimer();
+                    }
                 }
             }, 1000)
         }, 1000 - new Date().getMilliseconds());
@@ -117,12 +122,11 @@
                 <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
                 <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
                 <label><span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}></label>
-                <label><span>Timer Default: </span><input type="number" bind:value={minutes}><input type="number"
-                                                                                                    bind:value={seconds}></label>
             </section>
             <footer>
                 <form method="dialog">
-                    <button autofocus>Close</button>
+                    <button>Close</button>
+                    <button on:click={onClose} style="background-color:red;">🗑 Delete</button>
                 </form>
             </footer>
         </div>
@@ -135,7 +139,22 @@
         grid-gap: 0.5rem;
         grid-template-columns: 2fr 1fr;
         flex-flow: column;
-        background-color: rgba(0, 0, 0, 0.66);
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    dialog::backdrop {
+        backdrop-filter: blur(5px);
+    }
+
+    dialog > div {
+        background: linear-gradient(45deg, var(--color1), var(--color2));
+        border-radius: 1rem;
+
+        box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+        -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+
+        padding: 1rem;
     }
 
     dialog > div > section {
@@ -156,15 +175,22 @@
         margin: 0;
         padding: 0;
         font-size: medium;
-        height: 2rem;
-        display: inline;
-        border: none;
+        height: 1rem;
+        border: 0.1rem solid black;
         outline: none;
         border-radius: 0;
         background-color: rgba(0, 0, 0, 0.33);
         appearance: none;
         vertical-align: bottom;
         text-align: center;
+        aspect-ratio: 1;
+        display: block;
+    }
+
+    dialog > div > footer > form {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 1rem;
     }
 
     header.handle {
@@ -246,12 +272,14 @@
     }
 
     div.settingsContainer > button {
-        border: none; background: none;
+        border: none;
+        background: none;
     }
 
     form > button[type="reset"] {
         grid-column: span 1;
     }
+
     form > button[type="submit"] {
         grid-column: span 3;
     }
@@ -263,6 +291,7 @@
         background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 var(--percentageDone), rgba(0, 0, 0, 0.11) var(--percentageDone) 100%);
 
     }
+
     form > label {
         grid-column: span 2;
     }
@@ -281,8 +310,6 @@
         text-align: center;
         font-weight: bold;
     }
-
-
 
 
     form input[type="number"]:disabled {

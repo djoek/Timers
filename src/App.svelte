@@ -40,7 +40,8 @@
 <main class="container" bind:this={main}>
     <div class="timersContainer">
         {#each timers as timer, timerId}
-            <Timer {timerId} {...timer}/>
+            <Timer {timerId} {...timer}
+                   onClose={() => {timers.splice(timerId, 1); timers = [...timers]; console.log('delete', timerId);} }/>
         {/each}
     </div>
     <div class="controls">
