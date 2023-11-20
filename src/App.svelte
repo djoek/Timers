@@ -23,8 +23,9 @@
 
 <main class="container">
 	{#each Array(15) as _, index (index)}
-        <Timer timerId={index+1} name="Timer {index+1}"
-               color1={colors[Math.floor(Math.random()*colors.length)]}
+        <Timer timerId={index+1}
+               minutes=5 seconds=0
+               color1={colors[index]}
                color2={colors[Math.floor(Math.random()*colors.length)]}/>
     {/each}
 </main>
@@ -33,7 +34,7 @@
 
     main {
         display: grid;
-        grid-template-columns: repeat(auto-fill, 16rem);
+        grid-template-columns: repeat(auto-fit, 16rem);
         grid-gap: 1rem;
         justify-content: center;
 

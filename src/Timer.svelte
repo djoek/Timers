@@ -1,44 +1,52 @@
 <script>
+    import {onMount} from 'svelte';
+
     export let paused = true
     export let color1 = '#ff0000';
     export let color2 = '#0000ff';
-    export let secondsToGo = 0
-    export let name = ""
+    export let minutes = 0
+    export let seconds = 0
     export let timerId = 0
+    export let name = "Timer " + timerId
 
     let interval
+    export let secondsToGo = 0
 
-    $: timerMinutes = Math.floor(secondsToGo / 60)
-    $: timerSeconds = secondsToGo - Math.floor(secondsToGo / 60) * 60
-    $: secondsToGo
+    let timerMinutes = minutes
+    let timerSeconds = seconds
 
-    function startTimer(ev) {
-        ev.target.blur()
-        stopTimer()
-        secondsToGo = timerMinutes * 60 + timerSeconds
-        paused = false
-        interval = setInterval(() => {
-            if (paused) {
-                return
-            }
-            secondsToGo = secondsToGo - 1
-            if (secondsToGo <= 0) {
-                stopTimer()
-                secondsToGo = 0
-                paused = true
-            }
-        }, 1000);
+    $: secondsToGo = parseInt(timerMinutes) * 60 + parseInt(timerSeconds)
+
+
+    function spread(stg) {
+        timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
+        timerSeconds = String(stg - Math.floor(stg / 60) * 60).padStart(2, '0');
+        return stg
     }
 
-    function pauseTimer() {
-        paused = !paused
-        if (secondsToGo <= 0) {
-            paused = true
+    function setTimer(ev) {
+        if (paused) {
+            ev.target.focus()
+            resetTimer()
+            spread(secondsToGo)
+
+            setTimeout(() => {  // Syncronized
+                interval = setInterval(() => {
+                    spread(secondsToGo - 1)
+                    if (secondsToGo <= 0) {
+                        paused = true
+                    }
+                }, 1000)
+            }, 1000 - new Date().getMilliseconds());
         }
+        paused = !paused
     }
 
-    function stopTimer() {
+    function resetTimer() {
         clearInterval(interval);
+        paused = true
+        timerMinutes = minutes
+        timerSeconds = seconds
     }
 
     let settings;
@@ -47,6 +55,9 @@
         settings.show();
     }
 
+    onMount(() => {
+        spread(secondsToGo)
+    });
 </script>
 
 
@@ -54,30 +65,35 @@
     <div class="handle">&nbsp;</div>
     <div on:click={toggleSettings} class="settings">⚙</div>
     <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
-    <form on:submit|preventDefault={(ev) => startTimer(ev)} class="timerForm">
+    <form class="timerForm"
+          on:submit|preventDefault={(ev) => setTimer(ev)}
+          on:reset|preventDefault={resetTimer}>
         <label>
-            <input type="text" inputmode="numeric" bind:value={timerMinutes} on:focus={event => event.target.select()}
-                   class="minutesField">
+            <input type="number" inputmode="numeric" bind:value={timerMinutes}
+                   on:focus|preventDefault={event => event.target.select()}
+                   class="minutesField" disabled={!paused}>
             <span>M</span>
         </label>
         <label>
-            <input type="text" inputmode="numeric" bind:value={timerSeconds} on:focus={event => event.target.select()}
-                   class="secondsField">
+            <input type="number" inputmode="numeric" bind:value={timerSeconds}
+                   on:focus|preventDefault={event => event.target.select()}
+                   class="secondsField" disabled={!paused}>
             <span>S</span>
         </label>
-        <button type="button" on:click={pauseTimer}>{ paused ? "▶" : "⏸" }</button>
-        <button type="submit">SET</button>
+
+        <button type="reset">RESET</button>
+        <button type="submit">{ paused ? "▶" : "⏸" }</button>
     </form>
     <dialog bind:this={settings}>
         <div style="display: flex; flex-flow: column; width:16rem;">
-            <header><h1>Settings</h1></header>
+            <header><h2>{name} Settings</h2></header>
             <section>
                 <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
                 <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
             </section>
             <footer>
                 <form method="dialog">
-                    <button>Close</button>
+                    <button autofocus>Close</button>
                 </form>
             </footer>
         </div>
@@ -91,7 +107,12 @@
         grid-template-columns: 2fr 1fr;
         flex-flow: column;
         background-color: rgba(0, 0, 0, 0.66);
-        border: thin solid black;
+    }
+
+    dialog > div > section {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 0.5rem;
     }
 
     dialog > div > section > label {
@@ -146,17 +167,19 @@
     }
 
     label {
-        font-size: xx-large;
         text-align: right;
         display: flex;
         flex-flow: row;
-
+        font-family: monospace, sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     button {
         margin: 0;
-        background-color: rgba(0, 0, 0, 0.66);
-        border: none;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 0.25rem solid rgba(0, 0, 0, 0.5);
+        border-radius: 0.5rem;
 
     }
 
@@ -169,31 +192,6 @@
     }
 
     button[type=button] {
-    }
-
-
-    input[type="text"] {
-
-        text-align: right;
-        font-size: xx-large;
-        border: none;
-        outline: none;
-        border-radius: 0;
-        background-color: rgba(0, 0, 0, 0.33);
-        margin: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        padding-right: 2rem;
-        appearance: none;
-
-    }
-
-    label > input + span {
-        margin-left: -1rem;
-        user-select: none;
-        font-size: small;
-        vertical-align: middle;
-        display: block;
     }
 
 
@@ -224,4 +222,47 @@
         margin-top: 0.75rem;
     }
 
+    label {
+        text-align: right;
+        display: grid;
+        grid-template-columns: 5fr 0fr;
+        font-family: monospace, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    input[type="number"] {
+        display: inline;
+        border: none;
+        outline: none;
+        border-radius: 0;
+        background-color: rgba(0, 0, 0, 0.33);
+        margin: 0;
+        padding: 0;
+        appearance: none;
+        vertical-align: bottom;
+    }
+
+    input[type="number"] {
+        font-size: xxx-large;
+        text-align: center;
+        font-weight: bold;
+
+    }
+
+
+    input[type="number"]:disabled {
+        color: white;
+        background-color: rgba(0, 0, 0, 1);
+        appearance: none;
+        opacity: 1;
+
+    }
+
+    label > input + span {
+        text-align: center;
+        margin-left: -1em;
+        user-select: none;
+        font-size: medium;
+    }
 </style>
