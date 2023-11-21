@@ -251,7 +251,6 @@
         background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
         max-width: 16rem;
-        aspect-ratio: 19/7;
         box-shadow: 0 0.5rem 0 3px rgba(0,0,0,0.33), 0 0.5rem 0 1px var(--color1);
 
 

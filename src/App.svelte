@@ -67,7 +67,7 @@
     </div>
 </main>
 <footer>
-    <span>Created out of necessity and blind hubris. Docs & Source: <a href="https://github.com/djoek/Timers">GitHub</a></span>
+    <span><a href="https://github.com/djoek/Timers">GitHub</a></span>
     <div class="controls">
         <a on:click={(ev) => addTimer(ev,
         {minutes: 0,
