@@ -53,25 +53,25 @@
         {minutes: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>00:00
+        })}>+00:00
         </button>
         <button on:click={(ev) => addTimer(ev,
         {minutes: 0, seconds: 10,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>00:10
+        })}>+00:10
         </button>
         <button on:click={(ev) => addTimer(ev,
         {minutes: 2, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>02:00
+        })}>+02:00
         </button>
         <button on:click={(ev) => addTimer(ev,
         {minutes: 5, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>05:00
+        })}>+05:00
         </button>
         <button on:click={pauseAll}>⏸ All</button>
     </div>
