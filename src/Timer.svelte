@@ -20,14 +20,15 @@
 
     function getConfig() {
         return {
-        timerId: timerId,
-        name: name,
-        autoReset: autoReset,
-        color1: color1,
-        color2: color2,
-        minutes: minutes,
-        seconds: seconds,
-    }}
+            timerId: timerId,
+            name: name,
+            autoReset: autoReset,
+            color1: color1,
+            color2: color2,
+            minutes: minutes,
+            seconds: seconds,
+        }
+    }
 
     let interval
     export let secondsToGo = 0
@@ -251,7 +252,7 @@
         background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
         max-width: 16rem;
-        box-shadow: 0 0.5rem 0 3px rgba(0,0,0,0.33), 0 0.5rem 0 1px var(--color1);
+        box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
 
 
         display: grid;
@@ -280,18 +281,29 @@
 
 
     button {
+        font-weight: bolder;
+        font-size: x-large;
         margin: 0;
-        background-color: rgba(0, 0, 0, 0.25);
-        border: 0.15rem solid rgba(0, 0, 0,0.5);
+        background-color: rgba(0, 0, 0, 0.01);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 0.5rem;
         box-shadow: 0 4px 0 1px rgba(0, 0, 0, 0.49);
         transform: translate(0, -4px);
         transition-property: transform, box-shadow;
         transition-duration: 4ms;
+
+        display: flex;
+        justify-content: center; align-items: center;
     }
 
     button:active {
-        font-weight: bolder;
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.49);
+        transform: translate(0, 0);
+        transition-property: transform, box-shadow;
+        transition-duration: 4ms;
+    }
+
+    button:disabled {
         box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.49);
         transform: translate(0, 0);
         transition-property: transform, box-shadow;
@@ -301,16 +313,19 @@
     button[type=submit] {
     }
 
+    button.cogField {
+        aspect-ratio: 1;
+        width: 2rem;
+    }
+
     div.settingsContainer {
         grid-area: settings;
         display: grid;
-        grid-gap: 0.25rem;
+        grid-gap: 0.33rem;
         grid-template-columns: 1fr 8fr;
         color: white;
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
-        line-height: var(--line-height);
-        height: var(--line-height);
         margin: 0.75rem 0.75rem 0.25rem;
     }
 
@@ -318,10 +333,6 @@
         padding: 0.25rem;
     }
 
-    div.settingsContainer > button {
-        border: 0.1rem solid rgba(0, 0, 0, 0.40);
-        background-color: rgba(0, 0, 0, 0.20);
-    }
 
     form > button[type="reset"] {
         grid-column: span 1;
