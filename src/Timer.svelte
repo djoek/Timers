@@ -2,6 +2,7 @@
     import {onMount, onDestroy} from 'svelte';
 
     export let onClose;
+    export let updatePersistent;
 
     export let timerId = 0
     export let name = "Timer " + timerId
@@ -15,21 +16,33 @@
         return new Date(Date.now() + secondsDelta * 1000)
     }
 
+    let timerEnds = endDate(parseInt(minutes) * 60 + parseInt(seconds))
+
+    // updatePersistent({
+    //     timerId: timerId,
+    //     name: name,
+    //     autoReset: autoReset,
+    //     color1: color1,
+    //     color2: color2,
+    //     minutes: minutes,
+    //     seconds: seconds,
+    // })
+
     let interval
     export let secondsToGo = 0
 
-    let timerEnds = endDate(parseInt(minutes) * 60 + parseInt(seconds))
     let timerMinutes = minutes
     let timerSeconds = seconds
     let percentageDone = '0%'
 
     $: secondsToGo = Math.floor((timerEnds - new Date()) / 1000)
-    $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined, {
-        style: 'percent',
-        minimumFractionDigits: 0
+    $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(
+        undefined, {
+            style: 'percent',
+            minimumFractionDigits: 0
     });
 
-    $: paused = interval === undefined
+    $: stopped = interval === undefined
 
     function spread(stg) {
         timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
@@ -37,7 +50,10 @@
         return stg
     }
 
-    function startTimer() {
+    export function startTimer() {
+        if (!stopped) {
+            stopTimer()
+        }
         const updateDelta = 250
         timerEnds = endDate(parseInt(timerMinutes) * 60 + parseInt(timerSeconds))
         setTimeout(() => {  // Synchronized to the clock second
@@ -59,7 +75,7 @@
         }, 1000 - new Date().getMilliseconds());
     }
 
-    function stopTimer() {
+    export function stopTimer() {
         clearInterval(interval);
         interval = undefined
     }
@@ -121,7 +137,7 @@
                    on:focus|preventDefault={event => event.target.select()}
                    on:input={setTimer}
                    placeholder={minutes}
-                   class="minutesField" disabled={!paused} min="0">
+                   class="minutesField" disabled={!stopped} min="0">
             <span>M</span>
         </label>
         <label>
@@ -129,10 +145,10 @@
                    on:focus|preventDefault={event => event.target.select()}
                    on:input={setTimer}
                    placeholder={seconds}
-                   class="secondsField" disabled={!paused} min="0">
+                   class="secondsField" disabled={!stopped} min="0">
             <span>S</span>
         </label>
-        <button type="reset" class="resetField" disabled={!paused}>↺</button>
+        <button type="reset" class="resetField" disabled={!stopped}>↺</button>
         <button type="submit">{ interval ? "⏸" : "▶" }</button>
     </form>
     <dialog bind:this={settings}>

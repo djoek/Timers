@@ -7,22 +7,43 @@
 
     let main;
     let timers = [];
+    let uid = 1;
+
     $: timers
     $: console.log(timers)
+    $: console.log(uid)
 
     const colors = ["#0e6251", "#0b5345", "#186a3b", "#145a32", "#1b4f72",
         "#154360", "#512e5f", "#4a235a", "#1b2631", "#17202a",
         "#7d6608", "#7e5109", "#784212", "#6e2c00", "#78281f",
         "#641e16", "#7b7d7d", "#626567", "#4d5656", "#424949"]
 
+    timers = [{
+        timerId: uid++,
+        minutes: 2,
+        color1: colors[0],
+        color2: colors[5],
+    }];
+
     function addTimer(ev, timerProps) {
+        timerProps['timerId'] = uid++
         timers = [...timers, timerProps]
     }
 
     function pauseAll() {
-        timers.forEach(item => item['paused'] = true);
-        timers = [...timers]
+        timers.forEach(item => item.ref.stopTimer());
     }
+
+    function startAll() {
+        timers.forEach(item => item.ref.startTimer());
+    }
+
+    // function updatePersistent(timerSettings) {
+    //     const timerId = timerSettings['timerId']
+    //     timers[timerId] = timerSettings
+    //     timers = [...timers]
+    // }
+
     onMount(async () => {
         const drake = dragula([document.querySelector('div.timer'), document.querySelector('.timersContainer')],
             {
@@ -31,21 +52,16 @@
                 }
             });
 
-        timers = [{
-            minutes: 2,
-            color1: colors[0],
-            color2: colors[5],
-        }];
-
     });
 
 </script>
-
+<header></header>
 <main class="container" bind:this={main}>
     <div class="timersContainer">
-        {#each timers as timer, timerId}
-            <Timer {timerId} {...timer}
-                   onClose={() => {timers.splice(timerId, 1); timers = [...timers]; console.log('delete', timerId);} }/>
+        {#each timers as timer, i (timer.timerId) }
+            <Timer {...timer}
+                   bind:this={timer.ref}
+                   onClose={() => { timers = timers.toSpliced(i, 1); console.log('delete', i);} }/>
         {/each}
     </div>
     <div class="controls">
@@ -74,10 +90,20 @@
         })}>+05:00
         </button>
         <button on:click={pauseAll}>⏸ All</button>
+        <button on:click={startAll}>⏵ All</button>
     </div>
 </main>
+<footer>Created in Svelte. Source: <a href="https://github.com/djoek/Timers">GitHub</a></footer>
 
 <style>
+    footer {
+        background-color: rgba(0, 0, 0, 0.25);
+        max-height: 4rem;
+        padding: 0.25rem;
+        margin: 0;
+
+    }
+
     main {
         display: flex;
         flex-flow: column;
