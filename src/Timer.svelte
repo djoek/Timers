@@ -3,27 +3,33 @@
 
     export let onClose;
 
-    export let paused = true
+    export let timerId = 0
+    export let name = "Timer " + timerId
     export let autoReset = false
     export let color1 = '#ff0000';
     export let color2 = '#0000ff';
     export let minutes = 0
     export let seconds = 0
-    export let timerId = 0
-    export let name = "Timer " + timerId
+
+    function endDate(secondsDelta) {
+        return new Date(Date.now() + secondsDelta * 1000)
+    }
 
     let interval
     export let secondsToGo = 0
 
+    let timerEnds = endDate(parseInt(minutes) * 60 + parseInt(seconds))
     let timerMinutes = minutes
     let timerSeconds = seconds
     let percentageDone = '0%'
 
-    $: secondsToGo = parseInt(timerMinutes) * 60 + parseInt(timerSeconds)
+    $: secondsToGo = Math.floor((timerEnds - new Date()) / 1000)
     $: percentageDone = Number(1 - (secondsToGo / (parseInt(minutes) * 60 + parseInt(seconds)))).toLocaleString(undefined, {
         style: 'percent',
         minimumFractionDigits: 0
     });
+
+    $: paused = interval === undefined
 
     function spread(stg) {
         timerMinutes = String(Math.floor(stg / 60)).padStart(2, '0');
@@ -31,36 +37,17 @@
         return stg
     }
 
-    function toggleTimer(ev) {
-        if (paused) {
-            ev.target.focus()
-            spread(secondsToGo)
-        }
-        paused = !paused
-    }
-
-    function setTimer() {
-        // Changes the default time
-        paused = true
-        minutes = timerMinutes
-        seconds = timerSeconds
-        spread(seconds + minutes * 60)
-
-        console.log('set the timer to', minutes, 'minutes and', seconds, 'seconds')
-    }
-
-    function initTimer() {
-        // creates the interval
-        clearInterval(interval);
-        setTimeout(() => {  // Synchronized
+    function startTimer() {
+        const updateDelta = 250
+        timerEnds = endDate(parseInt(timerMinutes) * 60 + parseInt(timerSeconds))
+        setTimeout(() => {  // Synchronized to the clock second
             interval = setInterval(() => {
-                if (!paused) {
-                    spread(secondsToGo - 1)
-                }
+                secondsToGo = Math.floor((timerEnds - new Date()) / 1000)
+                spread(secondsToGo)
                 if (secondsToGo <= 0) {
-                    paused = true
                     timerMinutes = 0
                     timerSeconds = 0
+                    stopTimer()
                     if (notMuted) {
                         timerAlarm.play();
                     }
@@ -68,18 +55,40 @@
                         resetTimer();
                     }
                 }
-            }, 1000)
+            }, updateDelta)
         }, 1000 - new Date().getMilliseconds());
+    }
+
+    function stopTimer() {
+        clearInterval(interval);
+        interval = undefined
+    }
+
+    function toggleTimer(ev) {
+        ev.target.focus()
+        if (interval) {
+            stopTimer()
+        } else {
+            startTimer()
+        }
+
+    }
+
+    function setTimer() {
+        // Changes the default time
+        minutes = parseInt(timerMinutes)
+        seconds = parseInt(timerSeconds)
+        spread(seconds + minutes * 60)
+        timerEnds = endDate(parseInt(timerMinutes) * 60 + parseInt(timerSeconds))
+        console.log('set the timer to', minutes, 'minutes and', seconds, 'seconds')
     }
 
     function resetTimer() {
         // Sets the timer display back to the default values and clears the interval
-        console.log('reset timer')
         spread(seconds + minutes * 60)
     }
 
     let settings;
-
     function toggleSettings() {
         settings.show();
     }
@@ -89,7 +98,6 @@
 
     onMount(() => {
         spread(secondsToGo)
-        initTimer()
         resetTimer()
     });
 
@@ -111,7 +119,7 @@
         <label>
             <input type="number" inputmode="numeric" bind:value={timerMinutes}
                    on:focus|preventDefault={event => event.target.select()}
-                   on:change={setTimer}
+                   on:input={setTimer}
                    placeholder={minutes}
                    class="minutesField" disabled={!paused} min="0">
             <span>M</span>
@@ -119,13 +127,13 @@
         <label>
             <input type="number" inputmode="numeric" bind:value={timerSeconds}
                    on:focus|preventDefault={event => event.target.select()}
-                   on:change={setTimer}
+                   on:input={setTimer}
                    placeholder={seconds}
                    class="secondsField" disabled={!paused} min="0">
             <span>S</span>
         </label>
-        <button type="reset" class="resetField">↺</button>
-        <button type="submit">{ paused ? "▶" : "⏸" }</button>
+        <button type="reset" class="resetField" disabled={!paused}>↺</button>
+        <button type="submit">{ interval ? "⏸" : "▶" }</button>
     </form>
     <dialog bind:this={settings}>
         <audio bind:this={timerAlarm} src="/assets/bbbb4x.wav"></audio>
