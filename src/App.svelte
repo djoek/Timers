@@ -56,53 +56,50 @@
 
 </script>
 <header></header>
-<main class="container" bind:this={main}>
-    <div class="timersContainer">
+<main bind:this={main}>
+    <div class="timersContainer container">
         {#each timers as timer, i (timer.timerId) }
             <Timer {...timer}
                    bind:this={timer.ref}
                    onClose={() => { timers = timers.toSpliced(i, 1); console.log('delete', i);} }/>
         {/each}
+
     </div>
+</main>
+<footer>
+    <span>Created out of necessity and blind hubris. Docs & Source: <a href="https://github.com/djoek/Timers">GitHub</a></span>
     <div class="controls">
-        <button on:click={(ev) => addTimer(ev,
+        <a on:click={(ev) => addTimer(ev,
         {minutes: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
         })}>+00:00
-        </button>
-        <button on:click={(ev) => addTimer(ev,
+        </a>
+        <a on:click={(ev) => addTimer(ev,
         {minutes: 0, seconds: 10,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
         })}>+00:10
-        </button>
-        <button on:click={(ev) => addTimer(ev,
+        </a>
+        <a on:click={(ev) => addTimer(ev,
         {minutes: 2, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
         })}>+02:00
-        </button>
-        <button on:click={(ev) => addTimer(ev,
+        </a>
+        <a on:click={(ev) => addTimer(ev,
         {minutes: 5, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
         })}>+05:00
-        </button>
-        <button on:click={pauseAll}>⏸ All</button>
-        <button on:click={startAll}>⏵ All</button>
+        </a>
+        <a on:click={pauseAll}>⏸ All</a>
+        <a on:click={startAll}>⏵ All</a>
     </div>
-</main>
-<footer>Created in Svelte. Source: <a href="https://github.com/djoek/Timers">GitHub</a></footer>
+</footer>
 
 <style>
-    footer {
-        background-color: rgba(0, 0, 0, 0.25);
-        max-height: 4rem;
-        padding: 0.25rem;
-        margin: 0;
 
-    }
 
     main {
         display: flex;
@@ -112,29 +109,65 @@
         align-items: center;
     }
 
+
     main > .timersContainer {
         display: grid;
-        grid-template-columns: repeat(auto-fit, 16rem);
-        grid-gap: 1rem;
-        width: 100vw;
+        grid-gap: 2rem;
+        padding: 0;
+        margin-bottom: 0;
+        grid-template-columns: repeat(auto-fit, minmax(max-content, 12rem));
+        justify-content: center;
+        align-items: center;
+    }
+
+    footer {
+        background-color: rgba(0, 0, 0, 0.25);
+        max-height: 4rem;
+        padding: 0.25rem;
+        margin: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 4rem;
+    }
+
+    footer > div.controls {
+        display: flex;
+        gap: 1rem;
+        padding: 0;
+        margin-bottom: 0;
         justify-content: center;
     }
 
-    main > div.controls {
-        display: grid;
-        grid-gap: 1rem;
-        padding: 1rem;
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    main > div.controls > button {
-        aspect-ratio: 1;
+    footer > div.controls > button {
+        display: block;
+        width: 8rem;
+        margin: 0;
+        padding: 0;
     }
 
     @media (min-width: 640px) {
         main {
             max-width: none;
         }
+    }
+
+    button {
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 0.15rem solid rgba(0, 0, 0, 0.5);
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 0 1px rgba(0, 0, 0, 0.49);
+        transform: translate(0, -4px);
+        transition-property: transform, box-shadow;
+        transition-duration: 4ms;
+    }
+
+    button:active {
+        font-weight: bolder;
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.49);
+        transform: translate(0, 0);
+        transition-property: transform, box-shadow;
+        transition-duration: 4ms;
     }
 
 </style>

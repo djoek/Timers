@@ -40,7 +40,7 @@
         undefined, {
             style: 'percent',
             minimumFractionDigits: 0
-    });
+        });
 
     $: stopped = interval === undefined
 
@@ -105,6 +105,7 @@
     }
 
     let settings;
+
     function toggleSettings() {
         settings.show();
     }
@@ -164,7 +165,7 @@
             </section>
             <footer>
                 <form method="dialog">
-                    <button>Close</button>
+                    <button autofocus>Close</button>
                     <button on:click={onClose} style="background-color:red;">🗑 Delete</button>
                 </form>
             </footer>
@@ -248,10 +249,10 @@
 
         background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
+        max-width: 16rem;
+        aspect-ratio: 16/9;
+        box-shadow: 0 0.5rem 0 3px rgba(0,0,0,0.33), 0 0.5rem 0 1px var(--color1);
 
-        box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-        -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
 
         display: grid;
         grid-template-areas: "handle handle"
@@ -281,13 +282,20 @@
     button {
         margin: 0;
         background-color: rgba(0, 0, 0, 0.25);
-        border: 0.25rem solid rgba(0, 0, 0, 1);
+        border: 0.15rem solid rgba(0, 0, 0,0.5);
         border-radius: 0.5rem;
-
+        box-shadow: 0 4px 0 1px rgba(0, 0, 0, 0.49);
+        transform: translate(0, -4px);
+        transition-property: transform, box-shadow;
+        transition-duration: 4ms;
     }
 
     button:active {
         font-weight: bolder;
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.49);
+        transform: translate(0, 0);
+        transition-property: transform, box-shadow;
+        transition-duration: 4ms;
     }
 
     button[type=submit] {
@@ -311,8 +319,8 @@
     }
 
     div.settingsContainer > button {
-        border: none;
-        background: none;
+        border: 0.1rem solid rgba(0, 0, 0, 0.40);
+        background-color: rgba(0, 0, 0, 0.20);
     }
 
     form > button[type="reset"] {
@@ -328,6 +336,7 @@
         color: white;
         font-weight: bold;
         background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 var(--percentageDone), rgba(0, 0, 0, 0.11) var(--percentageDone) 100%);
+        box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
 
     }
 
@@ -348,6 +357,8 @@
         font-size: xxx-large;
         text-align: center;
         font-weight: bold;
+
+        box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
     }
 
 
