@@ -115,7 +115,7 @@
         grid-gap: 2rem;
         padding: 0;
         margin-bottom: 0;
-        grid-template-columns: repeat(auto-fit, minmax(max-content, 12rem));
+        grid-template-columns: repeat(auto-fit, minmax(max-content, 16rem));
         justify-content: center;
         align-items: center;
     }
