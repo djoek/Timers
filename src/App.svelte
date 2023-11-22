@@ -134,7 +134,7 @@
     }
 
     div.addATimer {
-        border: thick dashed rgba(0, 0, 0, 0.25);
+        border: thick dashed rgba(255,255,255, 0.25);
         height: 100%;
         border-radius: 1rem;
         display: flex;
@@ -144,7 +144,7 @@
     button.plusButton {
         border: 0;
         background: none;
-        color: rgba(0, 0, 0, 0.25);
+        color: rgba(255,255,255, 0.25);
         font-size: 8rem;
         font-weight: bolder;
         height: 100%;
