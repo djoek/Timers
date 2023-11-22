@@ -66,6 +66,7 @@
                     timerMinutes = 0
                     timerSeconds = 0
                     stopTimer()
+                    spread(secondsToGo)
                     if (notMuted) {
                         timerAlarm.play();
                     }
@@ -125,119 +126,141 @@
     });
 </script>
 
-
-<div class="timer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
-    <header class="handle">&nbsp;</header>
-    <div class="settingsContainer">
-        <button on:click={toggleSettings} class="cogField">⚙</button>
-        <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
-    </div>
-    <form class="timerForm"
-          on:submit|preventDefault={(ev) => toggleTimer(ev)}
-          on:reset|preventDefault={resetTimer}>
-        <label>
-            <input type="number" inputmode="numeric" bind:value={timerMinutes}
-                   on:focus|preventDefault={event => event.target.select()}
-                   on:input={setTimer}
-                   placeholder={minutes}
-                   class="minutesField" disabled={!stopped} min="0">
-            <span>M</span>
-        </label>
-        <label>
-            <input type="number" inputmode="numeric" bind:value={timerSeconds}
-                   on:focus|preventDefault={event => event.target.select()}
-                   on:input={setTimer}
-                   placeholder={seconds}
-                   class="secondsField" disabled={!stopped} min="0">
-            <span>S</span>
-        </label>
-        <button type="reset" class="resetField" disabled={!stopped}>↺</button>
-        <button type="submit">{ interval ? "⏸" : "▶" }</button>
-    </form>
+<div class="singleTimerContainer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
     <dialog bind:this={settings}>
         <audio bind:this={timerAlarm} src="/assets/bbbb4x.wav"></audio>
-
-        <div style="display: flex; flex-flow: column; width:16rem;">
-            <header><h2>{name} Settings</h2></header>
+        <div style="display: flex; flex-flow: column; gap:1rem; width:16rem;">
+            <header><h2>settings</h2></header>
             <section>
-                <label><span>Left Color: </span><input type="color" bind:value={color1}></label>
-                <label><span>Right Color: </span><input type="color" bind:value={color2}></label>
-                <label><span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}></label>
-                <label><span>Play Sound: </span><input type="checkbox" bind:checked={notMuted}></label>
+                <label>
+                    <span>Colors</span>
+                    <input type="color" bind:value={color1}>
+                    <span></span>
+                    <input type="color" bind:value={color2}>
+                </label>
+                <label>
+                    <span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}>
+                    <span>Play Sound: </span><input type="checkbox" bind:checked={notMuted}>
+                </label>
             </section>
             <footer>
                 <form method="dialog">
                     <button autofocus>Close</button>
-                    <button on:click={onClose} style="background-color:red;">🗑 Delete</button>
+                    <button on:click={onClose} style="background-color:red;">🗑</button>
                 </form>
             </footer>
         </div>
     </dialog>
+
+    <div class="timer" >
+        <header class="handle">&nbsp;</header>
+        <div class="settingsContainer">
+            <button on:click={toggleSettings} class="cogField">⚙</button>
+            <div bind:textContent={name} class="nameField" contenteditable>{name}</div>
+        </div>
+        <form class="timerForm"
+              on:submit|preventDefault={(ev) => toggleTimer(ev)}
+              on:reset|preventDefault={resetTimer}>
+            <label>
+                <input type="number" inputmode="numeric" bind:value={timerMinutes}
+                       on:focus|preventDefault={event => event.target.select()}
+                       on:input={setTimer}
+                       placeholder={minutes}
+                       class="minutesField" disabled={!stopped} min="0">
+                <span>M</span>
+            </label>
+            <label>
+                <input type="number" inputmode="numeric" bind:value={timerSeconds}
+                       on:focus|preventDefault={event => event.target.select()}
+                       on:input={setTimer}
+                       placeholder={seconds}
+                       class="secondsField" disabled={!stopped} min="0">
+                <span>S</span>
+            </label>
+            <button type="reset" class="resetField" disabled={!stopped}>↺</button>
+            <button type="submit">{ interval ? "⏸" : "▶" }</button>
+
+        </form>
+
+    </div>
+
 </div>
-
-
 <style>
     dialog {
-        grid-gap: 0.5rem;
-        grid-template-columns: 2fr 1fr;
-        flex-flow: column;
-        background-color: rgba(0, 0, 0, 0.75);
+        min-width: 16rem;
+        min-height: 13rem;
+        padding: 0; margin: 0;
+        position:absolute;
+        top: inherit; left: inherit; bottom: inherit; right: inherit;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 1rem;
+        font-family: 'Orbitron',serif;
     }
 
     dialog::backdrop {
-        backdrop-filter: blur(5px);
+        backdrop-filter: none;
     }
 
     dialog > div {
-        background: linear-gradient(45deg, var(--color1), var(--color2));
+
+        background: linear-gradient(-45deg, var(--color1), var(--color2));
         border-radius: 1rem;
-
-        box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-        -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-
         padding: 1rem;
+        min-width: 16rem;
+        min-height: 13rem;
+        box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
+
+
     }
 
     dialog > div > section {
         display: flex;
         flex-flow: column nowrap;
         gap: 0.5rem;
+        margin: 0;
+    }
+
+    dialog header, dialog footer, h2 {
+        margin: 0;
+        font-family: 'Orbitron',serif;
+        font-size: large;
     }
 
     dialog > div > section > label {
         display: grid;
-        grid-template-columns: 4fr 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         justify-content: center;
         text-align: left;
+    }
+
+    dialog > div > section label > span, dialog > div > section > label > input {
+        display: flex;
+        align-items: center;
         height: 2rem;
+        width: 2rem;
+        padding: 0.1rem;
     }
 
     dialog > div > section > label > input {
-        margin: 0;
-        padding: 0;
-        font-size: medium;
-        height: 1rem;
-        border: 0.1rem solid black;
-        outline: none;
-        border-radius: 0;
-        background-color: rgba(0, 0, 0, 0.33);
-        appearance: none;
-        vertical-align: bottom;
-        text-align: center;
-        aspect-ratio: 1;
-        display: block;
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.25);
     }
+
 
     dialog > div > footer > form {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: row nowrap;
         gap: 1rem;
+        margin: 0;
+    }
+
+    dialog > div > footer > form button {
+        height: 2rem
     }
 
     header.handle {
         grid-area: handle;
-        border-radius: 0 0 0.25rem 0.25rem;
+        border-radius: 1rem 1rem 0 0 ;
         background: repeating-linear-gradient(
                 -45deg,
                 rgba(0, 0, 0, 0.10),
@@ -248,10 +271,11 @@
     }
 
     div.timer {
+        font-family: 'Orbitron', sans-serif;
 
         background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
-        max-width: 16rem;
+        width: 16rem; height: 13rem;
         box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
 
 
@@ -293,7 +317,8 @@
         transition-duration: 4ms;
 
         display: flex;
-        justify-content: center; align-items: center;
+        justify-content: center;
+        align-items: center;
     }
 
     button:active {
@@ -327,6 +352,7 @@
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
         margin: 0.75rem 0.75rem 0.25rem;
+
     }
 
     div.settingsContainer > * {
@@ -368,6 +394,7 @@
         font-size: xxx-large;
         text-align: center;
         font-weight: bold;
+        font-family: 'Orbitron', sans-serif;
 
         box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
     }
@@ -383,7 +410,7 @@
 
     }
 
-    label > input + span {
+    form.timerForm label > input + span {
         text-align: center;
         margin-left: -1em;
         user-select: none;

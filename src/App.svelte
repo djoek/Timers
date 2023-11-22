@@ -70,28 +70,10 @@
     <span><a href="https://github.com/djoek/Timers">GitHub</a></span>
     <div class="controls">
         <a on:click={(ev) => addTimer(ev,
-        {minutes: 0,
+        {minutes: 0, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>+00:00
-        </a>
-        <a on:click={(ev) => addTimer(ev,
-        {minutes: 0, seconds: 10,
-        color1: colors[Math.floor(Math.random() * colors.length)],
-        color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>+00:10
-        </a>
-        <a on:click={(ev) => addTimer(ev,
-        {minutes: 2, seconds: 0,
-        color1: colors[Math.floor(Math.random() * colors.length)],
-        color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>+02:00
-        </a>
-        <a on:click={(ev) => addTimer(ev,
-        {minutes: 5, seconds: 0,
-        color1: colors[Math.floor(Math.random() * colors.length)],
-        color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>+05:00
+        })}>Add a Timer
         </a>
         <a on:click={pauseAll}>⏸ All</a>
         <a on:click={startAll}>⏵ All</a>
@@ -151,23 +133,5 @@
         }
     }
 
-    button {
-        margin: 0;
-        background-color: rgba(0, 0, 0, 0.25);
-        border: 0.15rem solid rgba(0, 0, 0, 0.5);
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 0 1px rgba(0, 0, 0, 0.49);
-        transform: translate(0, -4px);
-        transition-property: transform, box-shadow;
-        transition-duration: 4ms;
-    }
-
-    button:active {
-        font-weight: bolder;
-        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.49);
-        transform: translate(0, 0);
-        transition-property: transform, box-shadow;
-        transition-duration: 4ms;
-    }
 
 </style>
