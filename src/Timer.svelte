@@ -66,7 +66,7 @@
                     timerMinutes = 0
                     timerSeconds = 0
                     stopTimer()
-                    spread(secondsToGo)
+                    spread(0)
                     if (notMuted) {
                         timerAlarm.play();
                     }
@@ -206,18 +206,20 @@
         background: linear-gradient(-45deg, var(--color1), var(--color2));
         border-radius: 1rem;
         padding: 1rem;
-        min-width: 16rem;
-        min-height: 13rem;
+        width: 16rem;
+        height: 13rem;
         box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
-
+        font-size: medium;
 
     }
 
     dialog > div > section {
         display: flex;
         flex-flow: column nowrap;
-        gap: 0.5rem;
-        margin: 0;
+        gap: 0;
+        padding: 0.5rem; margin: 0;
+        box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
+
     }
 
     dialog header, dialog footer, h2 {
