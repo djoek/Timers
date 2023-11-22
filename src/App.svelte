@@ -1,7 +1,7 @@
 <script>
     import {onMount} from 'svelte';
     import Timer from "./Timer.svelte";
-    // import '@picocss/pico';
+    import '@picocss/pico';
     import dragula from 'dragula';
     import 'dragula/dist/dragula.min.css';
 
@@ -57,14 +57,14 @@
 </script>
 <header>
     <div class="controls">
-        <a on:click={(ev) => addTimer(ev,
+        <a on:click|preventDefault={(ev) => addTimer(ev,
         {minutes: 0, seconds: 0,
         color1: colors[Math.floor(Math.random() * colors.length)],
         color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>Add a Timer
+        })} href="">Add a Timer
         </a>
-        <a on:click={pauseAll}>⏸ All</a>
-        <a on:click={startAll}>⏵ All</a>
+        <a on:click|preventDefault={pauseAll} href="">⏸ All</a>
+        <a on:click|preventDefault={startAll} href="">⏵ All</a>
     </div>
 </header>
 <main bind:this={main}>
@@ -74,7 +74,14 @@
                    bind:this={timer.ref}
                    onClose={() => { timers = timers.toSpliced(i, 1); console.log('delete', i);} }/>
         {/each}
-
+        <div class="addATimer" style="">
+            <button class="plusButton" on:click|preventDefault={(ev) => addTimer(ev,
+        {minutes: 0, seconds: 0,
+        color1: colors[Math.floor(Math.random() * colors.length)],
+        color2: colors[Math.floor(Math.random() * colors.length)],
+        })}>+
+            </button>
+        </div>
     </div>
 </main>
 <footer>
@@ -126,12 +133,37 @@
         justify-content: center;
     }
 
-    div.controls > button {
-        display: block;
-        width: 8rem;
+    div.addATimer {
+        border: thick dashed rgba(0, 0, 0, 0.25);
+        height: 100%;
+        border-radius: 1rem;
+        display: flex;
         margin: 0;
-        padding: 0;
     }
+
+    button.plusButton {
+        border: 0;
+        background: none;
+        color: rgba(0, 0, 0, 0.25);
+        font-size: 8rem;
+        font-weight: bolder;
+        height: 100%;
+    }
+
+    button.plusButton:active, button.plusButton:focus {
+        appearance: none;
+        outline: none;
+        border-color: inherit;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    /*div.controls > button {*/
+    /*    display: block;*/
+    /*    width: 8rem;*/
+    /*    margin: 0;*/
+    /*    padding: 0;*/
+    /*}*/
 
     @media (min-width: 640px) {
         main {
