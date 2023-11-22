@@ -152,7 +152,7 @@
         </div>
     </dialog>
 
-    <div class="timer" >
+    <div class="timer">
         <header class="handle">&nbsp;</header>
         <div class="settingsContainer">
             <button on:click={toggleSettings} class="cogField">⚙</button>
@@ -188,13 +188,17 @@
 <style>
     dialog {
         min-width: 16rem;
-        min-height: 13rem;
-        padding: 0; margin: 0;
-        position:absolute;
-        top: inherit; left: inherit; bottom: inherit; right: inherit;
+        min-height: 14rem;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: inherit;
+        left: inherit;
+        bottom: inherit;
+        right: inherit;
         background-color: rgba(0, 0, 0, 0);
         border-radius: 1rem;
-        font-family: 'Orbitron',serif;
+        font-family: 'Orbitron', serif;
     }
 
     dialog::backdrop {
@@ -207,7 +211,7 @@
         border-radius: 1rem;
         padding: 1rem;
         width: 16rem;
-        height: 13rem;
+        height: 14rem;
         box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
         font-size: medium;
 
@@ -217,14 +221,15 @@
         display: flex;
         flex-flow: column nowrap;
         gap: 0;
-        padding: 0.5rem; margin: 0;
+        padding: 0.5rem;
+        margin: 0;
         box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
 
     }
 
     dialog header, dialog footer, h2 {
         margin: 0;
-        font-family: 'Orbitron',serif;
+        font-family: 'Orbitron', serif;
         font-size: large;
     }
 
@@ -262,7 +267,7 @@
 
     header.handle {
         grid-area: handle;
-        border-radius: 1rem 1rem 0 0 ;
+        border-radius: 1rem 1rem 0 0;
         background: repeating-linear-gradient(
                 -45deg,
                 rgba(0, 0, 0, 0.10),
@@ -277,7 +282,8 @@
 
         background: linear-gradient(45deg, var(--color1), var(--color2));
         border-radius: 1rem;
-        width: 16rem; height: 13rem;
+        width: 16rem;
+        height: 14rem;
         box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
 
 
@@ -354,7 +360,7 @@
         background-color: rgba(0, 0, 0, 0);
         font-weight: bold;
         margin: 0.75rem 0.75rem 0.25rem;
-
+        align-items: center;
     }
 
     div.settingsContainer > * {

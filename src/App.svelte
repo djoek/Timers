@@ -1,7 +1,7 @@
 <script>
     import {onMount} from 'svelte';
     import Timer from "./Timer.svelte";
-    import '@picocss/pico';
+    // import '@picocss/pico';
     import dragula from 'dragula';
     import 'dragula/dist/dragula.min.css';
 
@@ -55,7 +55,18 @@
     });
 
 </script>
-<header></header>
+<header>
+    <div class="controls">
+        <a on:click={(ev) => addTimer(ev,
+        {minutes: 0, seconds: 0,
+        color1: colors[Math.floor(Math.random() * colors.length)],
+        color2: colors[Math.floor(Math.random() * colors.length)],
+        })}>Add a Timer
+        </a>
+        <a on:click={pauseAll}>⏸ All</a>
+        <a on:click={startAll}>⏵ All</a>
+    </div>
+</header>
 <main bind:this={main}>
     <div class="timersContainer container">
         {#each timers as timer, i (timer.timerId) }
@@ -68,20 +79,15 @@
 </main>
 <footer>
     <span><a href="https://github.com/djoek/Timers">GitHub</a></span>
-    <div class="controls">
-        <a on:click={(ev) => addTimer(ev,
-        {minutes: 0, seconds: 0,
-        color1: colors[Math.floor(Math.random() * colors.length)],
-        color2: colors[Math.floor(Math.random() * colors.length)],
-        })}>Add a Timer
-        </a>
-        <a on:click={pauseAll}>⏸ All</a>
-        <a on:click={startAll}>⏵ All</a>
-    </div>
+
 </footer>
 
 <style>
-
+    @media (min-width: 1600px) {
+        .container {
+            max-width: 1530px;
+        }
+    }
 
     main {
         display: flex;
@@ -97,12 +103,12 @@
         grid-gap: 2rem;
         padding: 0;
         margin-bottom: 0;
-        grid-template-columns: repeat(auto-fit, minmax(max-content, 16rem));
+        grid-template-columns: repeat(auto-fit, 16rem);
         justify-content: center;
         align-items: center;
     }
 
-    footer {
+    header, footer {
         background-color: rgba(0, 0, 0, 0.25);
         max-height: 4rem;
         padding: 0.25rem;
@@ -112,7 +118,7 @@
         gap: 4rem;
     }
 
-    footer > div.controls {
+    div.controls {
         display: flex;
         gap: 1rem;
         padding: 0;
@@ -120,7 +126,7 @@
         justify-content: center;
     }
 
-    footer > div.controls > button {
+    div.controls > button {
         display: block;
         width: 8rem;
         margin: 0;
