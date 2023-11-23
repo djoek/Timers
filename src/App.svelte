@@ -56,11 +56,9 @@
 
 </script>
 <header>
-    S P A C E T I M E R S
-    <div class="controls">
+    <span style="inline-size: max-content; word-wrap: none; ">S P A C E T I M E R S</span>
         <a on:click|preventDefault={pauseAll} href="">⏸ All</a>
         <a on:click|preventDefault={startAll} href="">⏵ All</a>
-    </div>
 </header>
 <main bind:this={main}>
     <div class="timersContainer container">
@@ -114,25 +112,17 @@
         font-family: monospace;
         background-color: rgba(0, 0, 0, 0.25);
         max-height: 4rem;
-        padding: 0.25rem 2rem;
+        padding: 0.25rem 1rem;
         margin: 0;
         display: flex;
         flex-flow: row nowrap;
-        gap: 4rem;
+        gap: 1rem;
         align-items: center;
 
     }
 
     footer {
         justify-content: end;
-    }
-
-    div.controls {
-        display: flex;
-        gap: 1rem;
-        padding: 0;
-        margin-bottom: 0;
-        justify-content: center;
     }
 
     div.addATimer {
