@@ -324,6 +324,7 @@
         transform: translate(0, -4px);
         transition-property: transform, box-shadow;
         transition-duration: 4ms;
+        font-family: monospace;
 
         display: flex;
         justify-content: center;

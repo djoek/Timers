@@ -111,6 +111,7 @@
     }
 
     header, footer {
+        font-family: monospace;
         background-color: rgba(0, 0, 0, 0.25);
         max-height: 4rem;
         padding: 0.25rem 2rem;
