@@ -95,8 +95,8 @@
 
     function setTimer() {
         // Changes the default time
-        minutes = parseInt(timerMinutes)
-        seconds = parseInt(timerSeconds)
+        minutes = parseInt(timerMinutes) || 0
+        seconds = parseInt(timerSeconds) || 0
         spread(seconds + minutes * 60)
         timerEnds = endDate(parseInt(timerMinutes) * 60 + parseInt(timerSeconds))
         console.log('set the timer to', minutes, 'minutes and', seconds, 'seconds')
