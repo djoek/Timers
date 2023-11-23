@@ -292,6 +292,7 @@
                              "settings settings"
                              "timer timer";
         grid-template-columns: 2fr 12fr;
+
     }
 
     form.timerForm {
@@ -405,6 +406,7 @@
         font-family: 'Orbitron', sans-serif;
 
         box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.33);
     }
 
 
