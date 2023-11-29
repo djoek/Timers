@@ -13,13 +13,14 @@
     export let seconds = 0
 
     let alarms = [
+        {name: 'No Sound', src: ''},
         {name: 'Beebeebeebeep x4', src: '/assets/bbbb4x.wav'},
         {name: 'Funny Screaming Goat', src: '/assets/fsg.mp3'},
         {name: 'Tritone Beep', src: '/assets/beep-tritone.mp3'},
         {name: 'Bell Chord', src: '/assets/bell-chord.mp3'},
     ]
 
-    let chosenAlarm = 0
+    let chosenAlarm = 1
 
     function endDate(secondsDelta) {
         return new Date(Date.now() + secondsDelta * 1000)
@@ -76,9 +77,9 @@
                     timerSeconds = 0
                     stopTimer()
                     spread(0)
-                    if (notMuted) {
-                        timerAlarm.play();
-                    }
+
+                    timerAlarm.play();
+
                     if (autoReset) {
                         resetTimer();
                     }
@@ -123,7 +124,6 @@
     }
 
     let timerAlarm;
-    let notMuted = true;
 
     onMount(() => {
         spread(secondsToGo)
@@ -151,9 +151,6 @@
                 </label>
                 <label>
                     <span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}>
-                </label>
-                <label>
-                    <span>Audible: </span><input type="checkbox" bind:checked={notMuted}>
                 </label>
                 <label>
                     <span>Sound:</span>
@@ -246,7 +243,7 @@
 
     dialog > div > section {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0;
         padding: 0.5rem;
         margin: 0;
@@ -273,7 +270,7 @@
     dialog > div > section label > span {
         display: flex;
         max-height: 2rem;
-        font-size: xx-small;
+        font-size: small;
         white-space: nowrap;
 
     }
@@ -288,7 +285,7 @@
     }
 
     dialog > div label:has(select) {
-        grid-column: 1/5;
+        grid-column: 1/4;
 
     }
 
