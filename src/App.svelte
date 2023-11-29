@@ -65,7 +65,7 @@
         {#each timers as timer, i (timer.timerId) }
             <Timer {...timer}
                    bind:this={timer.ref}
-                   onClose={() => { timers = timers.toSpliced(i, 1); console.log('delete', i);} }/>
+                   onDelete={() => { timers = timers.toSpliced(i, 1); console.log('delete', i);} }/>
         {/each}
         <div class="addATimer" style="">
             <button class="plusButton" on:click|preventDefault={(ev) => addTimer(ev,

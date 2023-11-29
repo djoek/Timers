@@ -1,7 +1,7 @@
 <script>
     import {onMount, onDestroy} from 'svelte';
 
-    export let onClose;
+    export let onDelete;
     export let updatePersistent;
 
     export let timerId = 0
@@ -167,8 +167,8 @@
             </section>
             <footer>
                 <form method="dialog">
+                    <button on:click={onDelete} style="background-color:red;">🗑</button>
                     <button autofocus>Close</button>
-                    <button on:click={onClose} style="background-color:red;">🗑</button>
                 </form>
             </footer>
         </div>
