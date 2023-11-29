@@ -12,6 +12,15 @@
     export let minutes = 0
     export let seconds = 0
 
+    let alarms = [
+        {name: 'Beebeebeebeep x4', src: '/assets/bbbb4x.wav'},
+        {name: 'Funny Screaming Goat', src: '/assets/fsg.mp3'},
+        {name: 'Tritone Beep', src: '/assets/beep-tritone.mp3'},
+        {name: 'Bell Chord', src: '/assets/bell-chord.mp3'},
+    ]
+
+    let chosenAlarm = 0
+
     function endDate(secondsDelta) {
         return new Date(Date.now() + secondsDelta * 1000)
     }
@@ -127,21 +136,34 @@
 </script>
 
 <div class="singleTimerContainer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
-    <dialog bind:this={settings}>
-        <audio bind:this={timerAlarm} src="/assets/bbbb4x.wav"></audio>
-        <div style="display: flex; flex-flow: column; gap:1rem; width:16rem;">
+    <dialog bind:this={settings} open>
+        <audio bind:this={timerAlarm} src={alarms[chosenAlarm].src}></audio>
+        <div>
             <header><h2>settings</h2></header>
             <section>
                 <label>
-                    <span>Colors</span>
+                    <span>Color 1</span>
                     <input type="color" bind:value={color1}>
-                    <span></span>
+                </label>
+                <label>
+                    <span>Color 2</span>
                     <input type="color" bind:value={color2}>
                 </label>
                 <label>
                     <span>Auto Reset: </span><input type="checkbox" bind:checked={autoReset}>
-                    <span>Play Sound: </span><input type="checkbox" bind:checked={notMuted}>
                 </label>
+                <label>
+                    <span>Audible: </span><input type="checkbox" bind:checked={notMuted}>
+                </label>
+                <label>
+                    <span>Sound:</span>
+                    <select bind:value={chosenAlarm} id="audioSelect">
+                        {#each alarms as alarm, i}
+                            <option value={i}>{alarm.name}</option>
+                        {/each}
+                    </select>
+                </label>
+
             </section>
             <footer>
                 <form method="dialog">
@@ -215,16 +237,21 @@
         box-shadow: 0 0.5rem 0 2px rgba(0, 0, 0, 0.5), 0 0.5rem 0 1px var(--color1);
         font-size: medium;
 
+        display: grid;
+        grid-template-rows: 2rem 7rem 4rem;
+        grid-gap: 0.5rem;
+
+
     }
 
     dialog > div > section {
-        display: flex;
-        flex-flow: column nowrap;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         gap: 0;
         padding: 0.5rem;
         margin: 0;
         box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.33);
-
+        overflow: hidden;
     }
 
     dialog header, dialog footer, h2 {
@@ -234,25 +261,36 @@
     }
 
     dialog > div > section > label {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        justify-content: center;
-        text-align: left;
-    }
-
-    dialog > div > section label > span, dialog > div > section > label > input {
         display: flex;
+        flex-flow: column nowrap;
+        text-align: left;
+        max-height: 2rem;
         align-items: center;
-        height: 2rem;
-        width: 2rem;
-        padding: 0.1rem;
+        justify-content: space-between;
+
     }
 
-    dialog > div > section > label > input {
+    dialog > div > section label > span {
+        display: flex;
+        max-height: 2rem;
+        font-size: xx-small;
+        white-space: nowrap;
+
+    }
+
+    dialog > div > section label input, dialog > div > section label select {
         display: flex;
         background-color: rgba(0, 0, 0, 0.25);
+        min-height: 1rem;
+        font-size: small;
+        padding: 0;
+        margin: 0;
     }
 
+    dialog > div label:has(select) {
+        grid-column: 1/5;
+
+    }
 
     dialog > div > footer > form {
         display: flex;
@@ -348,12 +386,12 @@
     button[type=submit] {
     }
 
-    button.cogField {
+    div.timer button.cogField {
         aspect-ratio: 1;
         width: 2rem;
     }
 
-    div.settingsContainer {
+    div.timer div.settingsContainer {
         grid-area: settings;
         display: grid;
         grid-gap: 0.33rem;
@@ -365,20 +403,20 @@
         align-items: center;
     }
 
-    div.settingsContainer > * {
+    div.timer div.settingsContainer > * {
         padding: 0.25rem;
     }
 
 
-    form > button[type="reset"] {
+    div.timer form > button[type="reset"] {
         grid-column: span 1;
     }
 
-    form > button[type="submit"] {
+    div.timer form > button[type="submit"] {
         grid-column: span 3;
     }
 
-    div.nameField {
+    div.timer div.nameField {
         display: flex;
         color: white;
         font-weight: bold;
@@ -387,11 +425,11 @@
 
     }
 
-    form > label {
+    div.timer form > label {
         grid-column: span 2;
     }
 
-    form > label > input[type="number"] {
+    div.timer form > label > input[type="number"] {
         display: inline;
         border: none;
         outline: none;
@@ -411,7 +449,7 @@
     }
 
 
-    form input[type="number"]:disabled {
+    div.timer form input[type="number"]:disabled {
         color: white;
         background-color: rgba(0, 0, 0, 0);
         appearance: none;
@@ -421,7 +459,7 @@
 
     }
 
-    form.timerForm label > input + span {
+    div.timer form.timerForm label > input + span {
         text-align: center;
         margin-left: -1em;
         user-select: none;
