@@ -136,7 +136,7 @@
 </script>
 
 <div class="singleTimerContainer" style="--color1: {color1}; --color2: {color2}; --percentageDone: {percentageDone}">
-    <dialog bind:this={settings} open>
+    <dialog bind:this={settings}>
         <audio bind:this={timerAlarm} src={alarms[chosenAlarm].src}></audio>
         <div>
             <header><h2>settings</h2></header>
